@@ -33,8 +33,8 @@ class ZendeskService extends AbstractService
         $reservationNumber,
         $hotel,
         $language,
-        $domainConfig)
-    {
+        $domainConfig
+    ) {
         $reservation = null;
 
         if (!empty($reservationNumber)) {
@@ -59,11 +59,11 @@ class ZendeskService extends AbstractService
         }
 
         if ($reservation != null) {
-            $roomName = $reservation->getRoom()->getName() . ' ('.$reservation->getRoom()->getType().')';
+            $roomName = $reservation->getRoom()->getName() . ' (' . $reservation->getRoom()->getType() . ')';
             $customFields['80531287'] = $roomName;
             $customFields['80531307'] = $reservation->getBookedDate()->format('Y-m-d');
-            $customFields['80924568'] = $reservation->getRoomPrice().' '.$reservation->getHotel()->getCurrency()->getCode();
-            $customFields['80918728'] = $reservation->getBookedStartTime()->format('H:i').' - '.$reservation->getBookedEndTime()->format('H:i');
+            $customFields['80924568'] = $reservation->getRoomPrice() . ' ' . $reservation->getHotel()->getCurrency()->getCode();
+            $customFields['80918728'] = $reservation->getBookedStartTime()->format('H:i') . ' - ' . $reservation->getBookedEndTime()->format('H:i');
         }
 
         $customFields['80918708'] = $language->getName();
@@ -77,9 +77,9 @@ class ZendeskService extends AbstractService
         $response = $client->users()->createOrUpdate(
             [
                 'email' => $email,
-                'name' => $firstName.' '.strtoupper($lastName),
-                'phone' => !empty($phoneNumber)? $phoneNumber:($reservation != null ? $reservation->getCustomer()->getSimplePhoneNumber() : ''),
-                'role' => 'end-user'
+                'name' => $firstName . ' ' . strtoupper($lastName),
+                'phone' => !empty($phoneNumber) ? $phoneNumber : ($reservation != null ? $reservation->getCustomer()->getSimplePhoneNumber() : ''),
+                'role' => 'end-user',
             ]
         );
 
@@ -88,15 +88,15 @@ class ZendeskService extends AbstractService
         $client->tickets()->create(
             [
                 'requester_id' => $response->user->id,
-                'subject'      => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
+                'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
                 'comment' =>
                     [
-                        'body'  => $message
+                        'body' => $message,
                     ],
-                'priority'      => 'normal',
-                'type'          => 'question',
-                'status'        => 'new',
-                'custom_fields' => $customFields
+                'priority' => 'normal',
+                'type' => 'question',
+                'status' => 'new',
+                'custom_fields' => $customFields,
             ]
         );
 
@@ -116,8 +116,8 @@ class ZendeskService extends AbstractService
         $subject,
         $message,
         $language,
-        $domainConfig)
-    {
+        $domainConfig
+    ) {
         $customFields = [];
         $customFields['80924888'] = 'hotel';
         $customFields['80918668'] = $hotelName;
@@ -129,17 +129,17 @@ class ZendeskService extends AbstractService
             'basic',
             [
                 'username' => $this->getServiceManager()->get('Config')['zendesk']['username'],
-                'token' => $this->getServiceManager()->get('Config')['zendesk']['token']
+                'token' => $this->getServiceManager()->get('Config')['zendesk']['token'],
             ]
         );
 
         $response = $client->users()->createOrUpdate(
             [
                 'email' => $email,
-                'name' => $firstName.' '.strtoupper($lastName),
+                'name' => $firstName . ' ' . strtoupper($lastName),
                 'phone' => $phoneNumber,
                 'role' => 'end-user',
-                'user_fields' => [ 'website' => $website ]
+                'user_fields' => ['website' => $website],
             ]
         );
 
@@ -149,12 +149,12 @@ class ZendeskService extends AbstractService
                 'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
                 'comment' =>
                     [
-                        'body' => $message
+                        'body' => $message,
                     ],
                 'priority' => 'normal',
                 'type' => 'question',
                 'status' => 'new',
-                'custom_fields' => $customFields
+                'custom_fields' => $customFields,
             ]
         );
 
@@ -185,17 +185,17 @@ class ZendeskService extends AbstractService
             'basic',
             [
                 'username' => $this->getServiceManager()->get('Config')['zendesk']['username'],
-                'token' => $this->getServiceManager()->get('Config')['zendesk']['token']
+                'token' => $this->getServiceManager()->get('Config')['zendesk']['token'],
             ]
         );
 
         $response = $client->users()->createOrUpdate(
             [
                 'email' => $email,
-                'name' => $firstName.' '.strtoupper($lastName),
+                'name' => $firstName . ' ' . strtoupper($lastName),
                 'phone' => $phoneNumber,
                 'role' => 'end-user',
-                'user_fields' => [ 'press_media' => $media ]
+                'user_fields' => ['press_media' => $media],
             ]
         );
 
@@ -206,12 +206,12 @@ class ZendeskService extends AbstractService
                     'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
                     'comment' =>
                         [
-                            'body' => $message
+                            'body' => $message,
                         ],
                     'priority' => 'normal',
                     'type' => 'question',
                     'status' => 'new',
-                    'custom_fields' => $customFields
+                    'custom_fields' => $customFields,
                 ]
             );
         } catch (\Exception $e) {
@@ -229,8 +229,8 @@ class ZendeskService extends AbstractService
         $email,
         $message,
         $language,
-        $domainConfig)
-    {
+        $domainConfig
+    ) {
         $customFields = [];
         $customFields['80924888'] = 'partner';
         $customFields['80918708'] = $language->getName();
@@ -240,14 +240,14 @@ class ZendeskService extends AbstractService
             'basic',
             [
                 'username' => $this->getServiceManager()->get('Config')['zendesk']['username'],
-                'token' => $this->getServiceManager()->get('Config')['zendesk']['token']
+                'token' => $this->getServiceManager()->get('Config')['zendesk']['token'],
             ]
         );
 
         $response = $client->users()->createOrUpdate(
             [
                 'email' => $email,
-                'name' => $firstName.' '.strtoupper($lastName),
+                'name' => $firstName . ' ' . strtoupper($lastName),
                 'phone' => $phoneNumber,
                 'role' => 'end-user',
             ]
@@ -259,12 +259,12 @@ class ZendeskService extends AbstractService
                 'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
                 'comment' =>
                     [
-                        'body' => $message
+                        'body' => $message,
                     ],
                 'priority' => 'normal',
                 'type' => 'question',
                 'status' => 'new',
-                'custom_fields' => $customFields
+                'custom_fields' => $customFields,
             ]
         );
 
