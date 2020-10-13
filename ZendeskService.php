@@ -6,9 +6,6 @@ use Zendesk\API\HttpClient as ZendeskAPI;
 
 class ZendeskService extends AbstractService
 {
-
-    const PRODUCTION_SECRET_TOKEN = '7a960781b588403ca32116048238d01c';
-
     /**
      * @param string $gender
      * @param string $firstName
@@ -24,7 +21,6 @@ class ZendeskService extends AbstractService
      * @return boolean
      */
     public function createCustomerTicket(
-        $gender,
         $firstName,
         $lastName,
         $phoneNumber,
@@ -32,8 +28,7 @@ class ZendeskService extends AbstractService
         $message,
         $reservationNumber,
         $hotel,
-        $language,
-        $domainConfig
+        $language
     ) {
         $reservation = null;
 
@@ -104,19 +99,15 @@ class ZendeskService extends AbstractService
     }
 
     public function createHotelTicket(
-        $gender,
         $firstName,
         $lastName,
-        $country,
         $phoneNumber,
         $email,
         $city,
         $website,
         $hotelName,
-        $subject,
         $message,
-        $language,
-        $domainConfig
+        $language
     ) {
         $customFields = [];
         $customFields['80924888'] = 'hotel';
@@ -162,19 +153,15 @@ class ZendeskService extends AbstractService
     }
 
     public function createPressTicket(
-        $gender,
         $firstName,
         $lastName,
-        $country,
         $phoneNumber,
         $email,
         $city,
         $media,
-        $subject,
         $message,
-        $language,
-        $domainConfig)
-    {
+        $language
+    ) {
         $customFields = [];
         $customFields['80924888'] = 'press';
         $customFields['80918648'] = $city;
@@ -222,14 +209,12 @@ class ZendeskService extends AbstractService
     }
 
     public function createPartnersTicket(
-        $gender,
         $firstName,
         $lastName,
         $phoneNumber,
         $email,
         $message,
-        $language,
-        $domainConfig
+        $language
     ) {
         $customFields = [];
         $customFields['80924888'] = 'partner';
