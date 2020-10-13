@@ -10,13 +10,16 @@ class ZendeskService extends AbstractService
 {
     private ZendeskAPIInterface $zendeskAPI;
     private ReservationRepository $reservationRepository;
+    private HotelContractService $hotelContractService;
 
     public function __construct(
         ZendeskAPIInterface $zendeskAPI,
-        ReservationRepository $reservationRepository
+        ReservationRepository $reservationRepository,
+        HotelContractService $hotelContractService
     ) {
         $this->zendeskAPI = $zendeskAPI;
         $this->reservationRepository = $reservationRepository;
+        $this->hotelContractService = $hotelContractService;
     }
 
     public function createCustomerTicket(
@@ -46,7 +49,7 @@ class ZendeskService extends AbstractService
         $customFields['80531327'] = $reservationNumber;
 
         if ($hotel != null) {
-            $hotelContact = $this->getServiceManager()->get('service.hotel_contacts')->getMainHotelContact($hotel);
+            $hotelContact = $this->hotelContractService->getMainHotelContact($hotel);
             $customFields['80531267'] = $hotelContact != null ? $hotelContact->getEmail() : null;
             $customFields['80918668'] = $hotel->getName();
             $customFields['80918648'] = $hotel->getAddress();
