@@ -8,16 +8,11 @@ use Zendesk\API\HttpClient as ZendeskAPI;
 
 class ZendeskService extends AbstractService
 {
-    public function __construct()
+    private ZendeskAPIInterface $zendeskAPI;
+
+    public function __construct(ZendeskAPIInterface $zendeskAPI)
     {
-        $this->client = new ZendeskAPI($this->getServiceManager()->get('Config')['zendesk']['subdomain']);
-        $this->client->setAuth(
-            'basic',
-            [
-                'username' => $this->getServiceManager()->get('Config')['zendesk']['username'],
-                'token' => $this->getServiceManager()->get('Config')['zendesk']['token'],
-            ]
-        );
+        $this->zendeskAPI = $zendeskAPI;
     }
 
     public function createCustomerTicket(
@@ -63,7 +58,7 @@ class ZendeskService extends AbstractService
 
         $customFields['80918708'] = $language->getName();
 
-        $userId = $this->createUser(
+        $userId = $this->zendeskAPI->createUser(
             [
                 'email' => $email,
                 'name' => $firstName . ' ' . strtoupper($lastName),
@@ -72,7 +67,7 @@ class ZendeskService extends AbstractService
             ]
         );
 
-        $this->createTicket(
+        $this->zendeskAPI->createTicket(
             [
                 'requester_id' => $userId,
                 'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
@@ -107,7 +102,7 @@ class ZendeskService extends AbstractService
         $customFields['80918648'] = $city;
         $customFields['80918708'] = $language->getName();
 
-        $userId = $this->createUser(
+        $userId = $this->zendeskAPI->createUser(
             [
                 'email' => $email,
                 'name' => $firstName . ' ' . strtoupper($lastName),
@@ -117,7 +112,7 @@ class ZendeskService extends AbstractService
             ]
         );
 
-        $this->createTicket(
+        $this->zendeskAPI->createTicket(
             [
                 'requester_id' => $userId,
                 'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
@@ -150,7 +145,7 @@ class ZendeskService extends AbstractService
         $customFields['80918648'] = $city;
         $customFields['80918708'] = $language->getName();
 
-        $userId = $this->createUser(
+        $userId = $this->zendeskAPI->createUser(
             [
                 'email' => $email,
                 'name' => $firstName . ' ' . strtoupper($lastName),
@@ -161,7 +156,7 @@ class ZendeskService extends AbstractService
         );
 
         try {
-            $this->createTicket(
+            $this->zendeskAPI->createTicket(
                 [
                     'requester_id' => $userId,
                     'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
@@ -194,7 +189,7 @@ class ZendeskService extends AbstractService
         $customFields['80924888'] = 'partner';
         $customFields['80918708'] = $language->getName();
 
-        $userId = $this->createUser(
+        $userId = $this->zendeskAPI->createUser(
             [
                 'email' => $email,
                 'name' => $firstName . ' ' . strtoupper($lastName),
@@ -203,7 +198,7 @@ class ZendeskService extends AbstractService
             ]
         );
 
-        $this->createTicket(
+        $this->zendeskAPI->createTicket(
             [
                 'requester_id' => $userId,
                 'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
@@ -219,20 +214,5 @@ class ZendeskService extends AbstractService
         );
 
         return true;
-    }
-
-    private function createUser(array $user): string
-    {
-        $response = $this->client->users()->createOrUpdate($user);
-
-        return $response->user->id;
-    }
-
-    /**
-     * @throws \Exception
-     */
-    private function createTicket(array $ticket): array
-    {
-        $this->client->tickets()->create($ticket);
     }
 }
