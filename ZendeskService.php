@@ -9,10 +9,14 @@ use Zendesk\API\HttpClient as ZendeskAPI;
 class ZendeskService extends AbstractService
 {
     private ZendeskAPIInterface $zendeskAPI;
+    private ReservationRepository $reservationRepository;
 
-    public function __construct(ZendeskAPIInterface $zendeskAPI)
-    {
+    public function __construct(
+        ZendeskAPIInterface $zendeskAPI,
+        ReservationRepository $reservationRepository
+    ) {
         $this->zendeskAPI = $zendeskAPI;
+        $this->reservationRepository = $reservationRepository;
     }
 
     public function createCustomerTicket(
@@ -28,7 +32,7 @@ class ZendeskService extends AbstractService
         $reservation = null;
 
         if (!empty($reservationNumber)) {
-            $reservation = $this->getEntityRepository('Reservation')->getByRef($reservationNumber);
+            $reservation = $this->reservationRepository->getByRef($reservationNumber);
 
             if ($reservation != null) {
                 if ($hotel == null) {
