@@ -8,6 +8,10 @@ namespace MobilityWork\Service;
  */
 interface ZendeskAPIInterface
 {
+    /**
+     * Il faudrait travailler ici avec des object plutôt qu'un tableau. On introduirait un
+     * nouveau "type" avec son comportement associé.
+     */
     public function createUser(array $user): string;
     public function createTicket(array $ticket): array;
 }
