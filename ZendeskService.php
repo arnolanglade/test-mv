@@ -162,24 +162,20 @@ class ZendeskService extends AbstractService
             ]
         );
 
-        try {
-            $this->zendeskAPI->createTicket(
-                [
-                    'requester_id' => $userId,
-                    'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
-                    'comment' =>
-                        [
-                            'body' => $message,
-                        ],
-                    'priority' => 'normal',
-                    'type' => 'question',
-                    'status' => 'new',
-                    'custom_fields' => $customFields,
-                ]
-            );
-        } catch (\Exception $e) {
-            $this->getLogger()->addError(var_export($userId, true));
-        }
+        $this->zendeskAPI->createTicket(
+            [
+                'requester_id' => $userId,
+                'subject' => strlen($message) > 50 ? substr($message, 0, 50) . '...' : $message,
+                'comment' =>
+                    [
+                        'body' => $message,
+                    ],
+                'priority' => 'normal',
+                'type' => 'question',
+                'status' => 'new',
+                'custom_fields' => $customFields,
+            ]
+        );
 
         return true;
     }
