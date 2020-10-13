@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace MobilityWork\Service;
 
-use Zendesk\API\HttpClient as ZendeskAPI;
-
-class ZendeskService extends AbstractService
+class ZendeskService
 {
     private ZendeskAPIInterface $zendeskAPI;
     private ReservationRepository $reservationRepository;

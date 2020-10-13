@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+use Zendesk\API\HttpClient as ZendeskAPI;
+
 namespace MobilityWork\Service;
 
 /**
