@@ -1,35 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace MobilityWork\Service;
 
 use Zendesk\API\HttpClient as ZendeskAPI;
 
 class ZendeskService extends AbstractService
 {
-    /**
-     * @param string $gender
-     * @param string $firstName
-     * @param string $lastName
-     * @param string $phoneNumber
-     * @param string $email
-     * @param string $message
-     * @param string $reservationNumber
-     * @param \MobilityWork\Entity\Hotel $hotel
-     * @param \MobilityWork\Entity\Language $language
-     * @param \MobilityWork\Entity\DomainConfig $domainConfig
-     *
-     * @return boolean
-     */
     public function createCustomerTicket(
-        $firstName,
-        $lastName,
-        $phoneNumber,
-        $email,
-        $message,
-        $reservationNumber,
-        $hotel,
-        $language
-    ) {
+        string $firstName,
+        string $lastName,
+        string $phoneNumber,
+        string $email,
+        string $message,
+        string $reservationNumber,
+        Hotel $hotel,
+        Language $language
+    ): bool {
         $reservation = null;
 
         if (!empty($reservationNumber)) {
@@ -99,16 +87,16 @@ class ZendeskService extends AbstractService
     }
 
     public function createHotelTicket(
-        $firstName,
-        $lastName,
-        $phoneNumber,
-        $email,
-        $city,
-        $website,
-        $hotelName,
-        $message,
-        $language
-    ) {
+        string $firstName,
+        string $lastName,
+        string $phoneNumber,
+        string $email,
+        string $city,
+        string $website,
+        string $hotelName,
+        string $message,
+        Language $language
+    ): bool {
         $customFields = [];
         $customFields['80924888'] = 'hotel';
         $customFields['80918668'] = $hotelName;
@@ -153,15 +141,15 @@ class ZendeskService extends AbstractService
     }
 
     public function createPressTicket(
-        $firstName,
-        $lastName,
-        $phoneNumber,
-        $email,
-        $city,
+        string $firstName,
+        string $lastName,
+        string $phoneNumber,
+        string $email,
+        string $city,
         $media,
-        $message,
-        $language
-    ) {
+        string $message,
+        Language $language
+    ): bool {
         $customFields = [];
         $customFields['80924888'] = 'press';
         $customFields['80918648'] = $city;
@@ -209,13 +197,13 @@ class ZendeskService extends AbstractService
     }
 
     public function createPartnersTicket(
-        $firstName,
-        $lastName,
-        $phoneNumber,
-        $email,
-        $message,
-        $language
-    ) {
+        string $firstName,
+        string $lastName,
+        string $phoneNumber,
+        string $email,
+        string $message,
+        Language $language
+    ): bool {
         $customFields = [];
         $customFields['80924888'] = 'partner';
         $customFields['80918708'] = $language->getName();
